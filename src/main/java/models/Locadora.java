@@ -48,4 +48,31 @@ public class Locadora {
     public void removeCliente(Cliente cliente) {
         this.clientes.remove(cliente);
     }
+
+    public Carro getCarroById(int id) {
+        for (Carro carro : carros) {
+            if (carro.getId() == id) {
+                return carro;
+            }
+        }
+        return null;
+    }
+
+    public Cliente getClienteById(int id) {
+        for (Cliente cliente : clientes) {
+            if (cliente.getId() == id) {
+                return cliente;
+            }
+        }
+        return null;
+    }
+
+    public Locacao getLocacaoById(int id) {
+        for (Locacao locacao : locacoes) {
+            if (locacao.getId() == id) {
+                return locacao;
+            }
+        }
+        return null;
+    }
 }
