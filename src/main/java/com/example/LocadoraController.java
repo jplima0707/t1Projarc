@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import models.Locadora;
 import models.Carro;
 import models.Cliente;
@@ -18,10 +20,11 @@ import responses.ErroResponse;
 @RestController
 @RequestMapping("/acmerent")
 public class LocadoraController {
-    private Locadora locadora = new Locadora();
+    private Locadora locadora;
     
     @GetMapping("/init")
     public String init() {
+        locadora = new Locadora();
         locadora.addCliente(new Cliente("Lucas", "12345678900", "1234567890"));
         locadora.addCarro(new Carro(1990, "IXP2029", 50.0));
         locadora.addCarro(new Carro(2000, "ABC1234", 60.0));
@@ -50,11 +53,31 @@ public class LocadoraController {
             Cliente cliente = locadora.getClienteById(id);
             if (cliente != null) {
                 return ResponseEntity.ok(cliente);
+
             } else {
                 ErroResponse erro = new ErroResponse("Usuario não encontrado");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
             }
     }
 
+    @PostMapping("/validaautomovel")
+    public ResponseEntity<?> validaAutomovel(@RequestBody int id) {
+        Carro carro = locadora.getCarroById(id);
+        if (carro != null) {
+            return ResponseEntity.ok(carro.isDisponivel());
+        } else {
+            ErroResponse erro = new ErroResponse("Automóvel não encontrado");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+        }
+    }
 
+    @PostMapping("/atendimento/cadlocacao")
+    public boolean cadastrarLocacao(@RequestBody Locacao locacao) {
+        try {
+            locadora.addLocacao(locacao);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
