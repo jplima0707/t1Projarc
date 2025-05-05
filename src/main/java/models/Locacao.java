@@ -6,15 +6,19 @@ public class Locacao {
     private double valorTotal;
     private Carro carro;
     private Cliente cliente;
-    private static int id = 0;
+    private boolean finalizado;
+    private int id;
+    private static int ProxId = 0;
 
     public Locacao(String dataInicio, int qntdDias, Carro carro, Cliente cliente) {
         this.dataInicio = dataInicio;
         this.qntdDias = qntdDias;
-        this.valorTotal = 0;
         this.carro = carro;
         this.cliente = cliente;
-        id++;
+        this.valorTotal = calcularValorTotal();
+        this.finalizado = false;
+        this.id = ProxId;
+        ProxId++;
     }
 
     public String getDataInicio() {
@@ -57,8 +61,16 @@ public class Locacao {
         this.cliente = cliente;
     }
 
-    public static int getId() {
+    public int getId() {
         return id;
+    }
+
+    public boolean isFinalizado() {
+        return finalizado;
+    }
+
+    public void setFinalizado(boolean finalizado) {
+        this.finalizado = finalizado;
     }
 
     public double calcularValorTotal() {

@@ -4,18 +4,18 @@ import java.util.List;
 
 public class Cliente {
     
-    private static int id = 0;
+    private int id;
+    private static int ProxId = 0;
     private String nome;
     private String cpf;
     private String telefone;
-    private List<Locacao> locacoes;
 
     public Cliente(String nome, String cpf, String telefone) {
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
-        this.locacoes = new ArrayList<>();
-        id++;
+        this.id = ProxId;
+        ProxId++;
     }
 
     public String getNome() {
@@ -42,19 +42,7 @@ public class Cliente {
         this.telefone = telefone;
     }
 
-    public static int getId() {
+    public int getId() {
         return id;
-    }
-
-    public List<Locacao> getLocacoes() {
-        return locacoes;
-    }
-
-    public void addLocacao(Locacao locacao) {
-        this.locacoes.add(locacao);
-    }
-
-    public void removeLocacao(Locacao locacao) {
-        this.locacoes.remove(locacao);
     }
 }

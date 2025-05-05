@@ -4,14 +4,16 @@ public class Carro {
     private String placa;
     private double valorDiaria;
     private boolean disponivel;
-    private static int id = 0;
+    private int id;
+    private static int ProxId = 0;
     
     public Carro(int ano, String placa, double valorDiaria) {
         this.ano = ano;
         this.placa = placa;
         this.valorDiaria = valorDiaria;
         this.disponivel = true;
-        id++;
+        this.id = ProxId;
+        ProxId++;
 
     }
 
@@ -47,7 +49,7 @@ public class Carro {
         this.disponivel = disponivel;
     }
 
-    public static int getId() {
+    public int getId() {
         return id;
     }
 }
