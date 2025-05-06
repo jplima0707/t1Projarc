@@ -70,6 +70,9 @@ public class Locacao {
     }
 
     public void setFinalizado(boolean finalizado) {
+        if (finalizado) {
+            carro.setDisponivel(true); 
+        }
         this.finalizado = finalizado;
     }
 

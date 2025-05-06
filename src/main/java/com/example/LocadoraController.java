@@ -17,6 +17,7 @@ import models.Locadora;
 import models.Carro;
 import models.Cliente;
 import models.Locacao;
+import requests.CadLocacaoRequest;
 import requests.IdRequest;
 import responses.ErroResponse;
 
@@ -75,7 +76,7 @@ public class LocadoraController {
     }
 
     @PostMapping("/atendimento/cadlocacao")
-    public boolean cadastrarLocacao(@RequestBody Locacao locacao) {
+    public boolean cadastrarLocacao(@RequestBody CadLocacaoRequest locacao) {
         try {
             repository.addLocacao(locacao);
             return true;
