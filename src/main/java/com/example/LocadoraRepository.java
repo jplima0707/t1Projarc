@@ -4,6 +4,7 @@ import models.Locadora;
 import models.Carro;
 import models.Cliente;
 import models.Locacao;
+import requests.CadLocacaoRequest;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
@@ -58,11 +59,27 @@ public class LocadoraRepository {
         return this.locadora.getCarroById(id);
     }
 
-    public void addLocacao(Locacao locacao) {
-        this.locadora.addLocacao(locacao);
-    }
-
     public Locacao getLocacaoById(int id) {
         return this.locadora.getLocacaoById(id);
+    }
+
+    public boolean cadastrarLocacao (CadLocacaoRequest locacao) {
+        try {
+            Carro carro = locadora.getCarroById(locacao.getIdCarro());
+            Cliente cliente = locadora.getClienteById(locacao.getIdCliente());
+            if (carro == null || cliente == null) {
+                return false;
+            }
+            if (carro.isDisponivel() == false) {
+                return false;
+            }
+            Locacao novaLocacao = new Locacao(locacao.getDataInicio(), locacao.getQntdDias(), carro, cliente);
+            carro.setDisponivel(false);
+            locadora.addLocacao(novaLocacao);
+            return true;
+        } catch (Exception e) {
+            
+            return false;
+        }
     }
 }

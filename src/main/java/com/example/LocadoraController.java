@@ -50,7 +50,7 @@ public class LocadoraController {
 
     @GetMapping("/listalocacoes")
     public List<Locacao> getLocacoes() {
-        return locadora.getLocacoes();
+        return repository.getAllLocacoes();
     }
 
     @GetMapping("/consultacliente")
@@ -77,12 +77,7 @@ public class LocadoraController {
 
     @PostMapping("/atendimento/cadlocacao")
     public boolean cadastrarLocacao(@RequestBody CadLocacaoRequest locacao) {
-        try {
-            repository.addLocacao(locacao);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return repository.cadastrarLocacao(locacao);
     }
 
     @PostMapping("/atualizaautomovel/{id}/estado/{status}")
