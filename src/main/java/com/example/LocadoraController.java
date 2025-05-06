@@ -24,37 +24,27 @@ import responses.ErroResponse;
 @RequestMapping("/acmerent")
 public class LocadoraController {
     private Locadora locadora;
+    private final LocadoraRepository repository;
+
+    public LocadoraController(LocadoraRepository repository) {
+        this.repository = repository;
+        this.locadora = repository.getLocadora();
+    }
     
     @GetMapping("/init")
     public String init() {
-        locadora = new Locadora();
-        locadora.addCliente(new Cliente("Lucas", "12345678900", "1234567890"));
-        locadora.addCliente(new Cliente("Maria", "98765432100", "0987654321"));
-        locadora.addCliente(new Cliente("João", "11122233344", "1122334455"));
-        locadora.addCarro(new Carro(1990, "IXP2029", 50.0));
-        locadora.addCarro(new Carro(2000, "ABC1234", 60.0));
-        locadora.addCarro(new Carro(2010, "XYZ5678", 70.0));
-        locadora.addCarro(new Carro(2020, "LMN9012", 80.0));
-        locadora.addCarro(new Carro(2023, "QRS3456", 90.0));
-        locadora.addCarro(new Carro(2024, "TUV7890", 100.0));
-        locadora.addCarro(new Carro(2025, "WXY1234", 110.0));
-        locadora.addCarro(new Carro(2026, "ZAB5678", 120.0));
-        locadora.addCarro(new Carro(2027, "CDE9012", 130.0));
-        locadora.addCarro(new Carro(2028, "FGH3456", 140.0));
-        locadora.addLocacao(new Locacao("2023-10-01", 5, locadora.getCarroById(0), locadora.getClienteById(0)));
-        locadora.addLocacao(new Locacao("2023-10-03", 10, locadora.getCarroById(5), locadora.getClienteById(2)));
-        return "Locadora inicializada com sucesso!";
+        return "Locadora já foi inicializada!";
     }
 
     @GetMapping("/listaautomoveis")
     public List<Carro> getAutomoveis() {
-        return locadora.getCarros();
+        return repository.getAllCarros();
         
     }
 
     @GetMapping("/listaclientes")
     public List<Cliente> getClientes() {
-        return locadora.getClientes();
+        return repository.getAllClientes();
     }
 
     @GetMapping("/listalocacoes")
@@ -64,7 +54,7 @@ public class LocadoraController {
 
     @GetMapping("/consultacliente")
     public ResponseEntity<?> consultaCliente(@RequestParam int id) {
-        Cliente cliente = locadora.getClienteById(id);
+        Cliente cliente = repository.getClienteById(id);
         if (cliente != null) {
             return ResponseEntity.ok(cliente);
         } else {
@@ -87,7 +77,7 @@ public class LocadoraController {
     @PostMapping("/atendimento/cadlocacao")
     public boolean cadastrarLocacao(@RequestBody Locacao locacao) {
         try {
-            locadora.addLocacao(locacao);
+            repository.addLocacao(locacao);
             return true;
         } catch (Exception e) {
             return false;
@@ -96,7 +86,7 @@ public class LocadoraController {
 
     @PostMapping("/atualizaautomovel/{id}/estado/{status}")
     public ResponseEntity<?> atualizaAutomovel(@PathVariable int id, @PathVariable boolean status) {
-        Carro carro = locadora.getCarroById(id);
+        Carro carro = repository.getCarroById(id);
         if (carro != null) {
             carro.setDisponivel(status);
             return ResponseEntity.ok(carro);
@@ -108,7 +98,7 @@ public class LocadoraController {
 
     @PostMapping("/atendimento/finalizalocacao")
     public boolean finalizaLocacao(@RequestBody IdRequest id) {
-        Locacao loc = locadora.getLocacaoById(id.getId());
+        Locacao loc = repository.getLocacaoById(id.getId());
         if (loc == null) {
             return false;
         }
