@@ -17,6 +17,7 @@ import models.Locadora;
 import models.Carro;
 import models.Cliente;
 import models.Locacao;
+import requests.CadLocacaoRequest;
 import requests.IdRequest;
 import responses.ErroResponse;
 
@@ -85,9 +86,19 @@ public class LocadoraController {
     }
 
     @PostMapping("/atendimento/cadlocacao")
-    public boolean cadastrarLocacao(@RequestBody Locacao locacao) {
+    public boolean cadastrarLocacao(@RequestBody CadLocacaoRequest locacao) {
         try {
-            locadora.addLocacao(locacao);
+            Carro carro = locadora.getCarroById(locacao.getIdCarro());
+            Cliente cliente = locadora.getClienteById(locacao.getIdCliente());
+            if (carro == null || cliente == null) {
+                return false;
+            }
+            if (carro.isDisponivel() == false) {
+                return false;
+            }
+            Locacao novaLocacao = new Locacao(locacao.getDataInicio(), locacao.getQntdDias(), carro, cliente);
+            carro.setDisponivel(false);
+            locadora.addLocacao(novaLocacao);
             return true;
         } catch (Exception e) {
             return false;

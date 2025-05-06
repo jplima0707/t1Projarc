@@ -18,6 +18,7 @@ public class Locadora {
     }
 
     public void addLocacao(Locacao locacao) {
+        locacao.getCarro().setDisponivel(false);
         this.locacoes.add(locacao);
     }
 
